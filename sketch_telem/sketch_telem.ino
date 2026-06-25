@@ -60,7 +60,11 @@ void loop() {
     float cell4 = vB4 - vB3;
     float total = vB4; 
 
-
+    cell1 = fabs(cell1);
+    cell2 = fabs(cell2);
+    cell3 = fabs(cell3);
+    cell4 = fabs(cell4);
+    total = fabs(total);
 
     Serial.print(currentMillis);
     Serial.print(F(","));
