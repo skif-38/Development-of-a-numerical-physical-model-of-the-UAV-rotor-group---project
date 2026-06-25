@@ -49,6 +49,24 @@ try:
                 current_file.write(line + '\n')
                 current_file.flush()
 
+
+
+        if msvcrt.kbhit():
+            key = msvcrt.getch()
+            if key == b'q':
+                print("Запись остановлена.")
+                break
+            elif key == b'r':
+                open_new_file()
+            elif key == b'p':
+                paused = not paused
+                if paused:
+                    print("Пауза")
+                else:
+                    print("Запись продолжена в тот же файл.")
+
+        time.sleep(0.01)
+
 finally:
     if file_opened and current_file:
         current_file.close()
