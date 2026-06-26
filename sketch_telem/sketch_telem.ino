@@ -9,19 +9,18 @@ const int pinA1 = A1;
 const int pinA2 = A2;
 const int pinA3 = A3;
 
+const float vRef = 4.94;
+const float ratio0 = 2.032;
+const float ratio1 = 3.057;
+const float ratio2 = 4.104;
+const float ratio3 = 5.104;
 
-const float vRef = 4.94;  
+const unsigned long motorOnTime = 7000;
+const unsigned long motorOffTime = 7000;
+const unsigned long motorPeriod = motorOnTime + motorOffTime;
+int throttle = 1300;
 
-const float ratio0 = 2.032;   
-const float ratio1 = 3.057;   
-const float ratio2 = 4.104;   
-const float ratio3 = 5.104;   
-
-
-
-const unsigned long motorOffTime  = 7000;
-const unsigned long motorPeriod   = motorOnTime + motorOffTime;
-const unsigned long serialInterval = 500; 
+const unsigned long serialInterval = 500;
 unsigned long prevSerialTime = 0;
 
 void setup() {
@@ -29,8 +28,8 @@ void setup() {
   delay(2000);
 
   motorESC.attach(escPin);
-  motorESC.writeMicroseconds(1000); 
-  delay(3000); 
+  motorESC.writeMicroseconds(1000);
+  delay(3000);
 
   Serial.println(F("Система готова"));
 }
@@ -38,13 +37,11 @@ void setup() {
 void loop() {
   unsigned long currentMillis = millis();
 
-  throttle = 1300;
-
   unsigned long timeInCycle = currentMillis % motorPeriod;
   if (timeInCycle < motorOnTime) {
-    motorESC.writeMicroseconds(throttle); 
+    motorESC.writeMicroseconds(throttle);
   } else {
-    motorESC.writeMicroseconds(1000); 
+    motorESC.writeMicroseconds(1000);
   }
 
   if (currentMillis - prevSerialTime >= serialInterval) {
@@ -59,7 +56,7 @@ void loop() {
     float cell2 = vB2 - vB1;
     float cell3 = vB3 - vB2;
     float cell4 = vB4 - vB3;
-    float total = vB4; 
+    float total = vB4;
 
     cell1 = fabs(cell1);
     cell2 = fabs(cell2);
@@ -77,7 +74,10 @@ void loop() {
     Serial.print(F(","));
     Serial.print(cell4, 3);
     Serial.print(F(","));
-    Serial.println(total, 3);
-    Serial.print((throttle - 1000) / 10)
+    Serial.print(total, 3);
+    Serial.print(F(","));
+
+    int gasPercent = (throttle - 1000) / 10;
+    Serial.println(gasPercent);
   }
 }
