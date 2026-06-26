@@ -32,7 +32,7 @@ def open_new_file():
     filename = f"zamer_{num}.csv"
     full_path = os.path.join(script_dir, filename)
     current_file = open(full_path, 'w', encoding='utf-8')
-    current_file.write('time,cell1,cell2,cell3,cell4,total\n')
+    current_file.write('time,cell1,cell2,cell3,cell4,total,throttle\n')
     current_file.flush()
     file_opened = True
     current_filename = full_path

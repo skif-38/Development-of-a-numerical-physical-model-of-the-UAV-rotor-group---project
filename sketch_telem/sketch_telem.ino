@@ -16,9 +16,9 @@ const float ratio2 = 4.104;
 const float ratio3 = 5.104;
 
 const unsigned long motorOnTime = 7000;
-const unsigned long motorOffTime = 7000;
+const unsigned long motorOffTime = 0;
 const unsigned long motorPeriod = motorOnTime + motorOffTime;
-int throttle = 1300;
+int throttle = 1400;
 
 const unsigned long serialInterval = 500;
 unsigned long prevSerialTime = 0;
@@ -31,7 +31,7 @@ void setup() {
   motorESC.writeMicroseconds(1000);
   delay(3000);
 
-  Serial.println(F("Система готова"));
+  Serial.println(F("Старт"));
 }
 
 void loop() {
