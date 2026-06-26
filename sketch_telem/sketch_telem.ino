@@ -38,10 +38,11 @@ void setup() {
 void loop() {
   unsigned long currentMillis = millis();
 
-  
+  throttle = 1300;
+
   unsigned long timeInCycle = currentMillis % motorPeriod;
   if (timeInCycle < motorOnTime) {
-    motorESC.writeMicroseconds(1700); 
+    motorESC.writeMicroseconds(throttle); 
   } else {
     motorESC.writeMicroseconds(1000); 
   }
@@ -77,5 +78,6 @@ void loop() {
     Serial.print(cell4, 3);
     Serial.print(F(","));
     Serial.println(total, 3);
+    Serial.print((throttle - 1000) / 10)
   }
 }
