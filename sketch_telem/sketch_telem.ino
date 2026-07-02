@@ -15,10 +15,11 @@ const float ratio1 = 3.057;
 const float ratio2 = 4.104;
 const float ratio3 = 5.104;
 
-const unsigned long motorOnTime = 7000;
-const unsigned long motorOffTime = 0;
+int throttle = 1600;
+
+const unsigned long motorOnTime = 10000;
+const unsigned long motorOffTime = 5000;
 const unsigned long motorPeriod = motorOnTime + motorOffTime;
-int throttle = 1400;
 
 const unsigned long serialInterval = 500;
 unsigned long prevSerialTime = 0;
@@ -28,20 +29,24 @@ void setup() {
   delay(2000);
 
   motorESC.attach(escPin);
-  motorESC.writeMicroseconds(1000);
-  delay(3000);
+  motorESC.writeMicroseconds(1000); 
+  delay(3000);                      
 
-  Serial.println(F("Старт"));
+  delay(10000);  
+  
+  Serial.println(F("Старт цикла: 10с работа, 5с пауза"));
 }
 
 void loop() {
   unsigned long currentMillis = millis();
 
   unsigned long timeInCycle = currentMillis % motorPeriod;
-  if (timeInCycle < motorOnTime) {
-    motorESC.writeMicroseconds(throttle);
+  bool motorOn = (timeInCycle < motorOnTime);  
+
+  if (motorOn) {
+    motorESC.writeMicroseconds(throttle); 
   } else {
-    motorESC.writeMicroseconds(1000);
+    motorESC.writeMicroseconds(1000);       
   }
 
   if (currentMillis - prevSerialTime >= serialInterval) {
@@ -64,6 +69,13 @@ void loop() {
     cell4 = fabs(cell4);
     total = fabs(total);
 
+    int gasPercent;
+    if (motorOn) {
+      gasPercent = (throttle - 1000) / 10;
+    } else {
+      gasPercent = 0;
+    }
+
     Serial.print(currentMillis);
     Serial.print(F(","));
     Serial.print(cell1, 3);
@@ -76,8 +88,6 @@ void loop() {
     Serial.print(F(","));
     Serial.print(total, 3);
     Serial.print(F(","));
-
-    int gasPercent = (throttle - 1000) / 10;
     Serial.println(gasPercent);
   }
 }
